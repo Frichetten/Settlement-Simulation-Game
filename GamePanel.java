@@ -19,6 +19,7 @@ public class GamePanel extends JPanel {
 	private ArrayList<Point> homes = new ArrayList<Point>();
 	private ArrayList<Point> farms = new ArrayList<Point>();
 	private boolean displayGrid;
+	private String isStructure = "";
 	
 	public void paintComponent(Graphics g){
 		g.setColor(Color.WHITE);
@@ -38,11 +39,18 @@ public class GamePanel extends JPanel {
 			}
 		}
 		
-		//Drawing Homes
-		g.setColor(Color.RED);
-		if (point.getX() != 0){
+		//Drawing Current Selection tied to mouse
+		if (isStructure.equals("home") && displayGrid){
+			g.setColor(Color.RED);
 			g.drawRect((int)point.getX(), (int)point.getY(), 60, 30);
 		}
+		else if (isStructure.equals("farm") && displayGrid){
+			g.setColor(Color.BLUE);
+			g.drawRect((int)point.getX(), (int)point.getY(), 60, 60);
+		}
+		
+		//Drawing Homes
+		g.setColor(Color.RED);
 		for (int i = 0; i < homes.size(); i++){
 			g.fillRect((int)homes.get(i).getX(), (int)homes.get(i).getY(), 60, 30);
 		}
@@ -84,5 +92,9 @@ public class GamePanel extends JPanel {
 	
 	public void setDisplayGrid(boolean b){
 		displayGrid = b;
+	}
+	
+	public void setIsStructure(String s){
+		isStructure = s;
 	}
 }
