@@ -13,6 +13,7 @@ import java.awt.event.MouseMotionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.event.MouseInputListener;
@@ -28,11 +29,15 @@ public class Client extends JFrame implements ActionListener {
 	private GamePanel gameScreen;
 	private Point point;
 	private boolean buildHome = false;
+	private boolean buildFarm = false;
 	private boolean displayGrid = false;
 	private int gold = 500;
+	private int food = 25;
+	private int people = 5;
+	private int totalPeople = 8;
 	private JPanel topPanel = new JPanel();
 	private JTextArea goldCounter;
-	private JButton options;
+	private JButton Options;
 	private Container client;
 	
 	/**
@@ -48,12 +53,14 @@ public class Client extends JFrame implements ActionListener {
 		//Creating the top panel that houses information such as money, food
 		//JPanel topPanel = new JPanel();
 		topPanel.setLayout(new BorderLayout());
-		goldCounter = new JTextArea("Gold: " + String.valueOf(gold) + "   ");
-		JButton options = new JButton("Options");
-		topPanel.add(options, BorderLayout.WEST);
+		goldCounter = new JTextArea("Gold: " + gold + "  Food: " + food +
+				"  People: " + people + "/" + totalPeople + "  ");
+		JButton Options = new JButton("Options");
+		topPanel.add(Options, BorderLayout.WEST);
 		topPanel.add(goldCounter, BorderLayout.EAST);
 		topPanel.setBackground(Color.GREEN);
 		goldCounter.setBackground(Color.GREEN);
+		Options.addActionListener(this);
 		
 		JPanel orderPanel = new JPanel();
 		orderPanel.setLayout(new GridLayout(2,2));
@@ -64,8 +71,9 @@ public class Client extends JFrame implements ActionListener {
 		orderPanel.add(well);
 		orderPanel.add(barracks);
 		orderPanel.add(home);
-		home.addActionListener(this);
 		orderPanel.add(farm);
+		home.addActionListener(this);
+		farm.addActionListener(this);
 		
 		JPanel unitPanel = new JPanel();
 		unitPanel.setLayout(new GridLayout(1,3));
@@ -88,17 +96,25 @@ public class Client extends JFrame implements ActionListener {
 		client.add(gameScreen, BorderLayout.CENTER);
 		client.add(unitPanel, BorderLayout.SOUTH);
 		
-		//Button on Hover
+		//Button on Hover for Home
 		home.addMouseListener(new MouseAdapter(){
 			public void mouseEntered(MouseEvent e){
-				playerInfo.setText("Costs: 100G, 20 Food  Creates: 5 people");
-				
+				playerInfo.setText("Costs: 100 Gold, 20 Food  Creates: 5 people");
 			}
 			public void mouseExited(MouseEvent e){
 				playerInfo.setText("");
 			}
 		});
 		
+		//Button on Hover for Farm
+		farm.addMouseListener(new MouseAdapter(){
+			public void mouseEntered(MouseEvent e){
+				playerInfo.setText("Costs: 50 Gold, 3 People  Creates: 20 Food");
+			}
+			public void mouseExited(MouseEvent e){
+				playerInfo.setText("");
+			}
+		});
 	}
 	
 	public void runGameLoop(){
@@ -111,11 +127,14 @@ public class Client extends JFrame implements ActionListener {
 	}
 	
 	public void updateTopPanel(){
-		goldCounter = new JTextArea("Gold: " + String.valueOf(gold) + "   ");
+		goldCounter = new JTextArea("Gold: " + gold + "  Food: " + food +
+				"  People: " + people + "/" + totalPeople + "  ");
 		topPanel.removeAll();
 		gameScreen.remove(topPanel);
 		topPanel.setLayout(new BorderLayout());
-		topPanel.add(new JButton("options"), BorderLayout.WEST);
+		JButton option = new JButton("Options");
+		option.addActionListener(this);
+		topPanel.add(option, BorderLayout.WEST);
 		topPanel.add(goldCounter, BorderLayout.EAST);
 		client.add(topPanel, BorderLayout.NORTH);
 		goldCounter.setBackground(Color.GREEN);
@@ -156,6 +175,12 @@ public class Client extends JFrame implements ActionListener {
 				runGameLoop();
 			}
 		}
+		else if (e.getActionCommand().equals("Options")){
+			System.out.println("Accessing Options");
+			int select = JOptionPane.showConfirmDialog(null,"Exit?", "",JOptionPane.YES_NO_OPTION);
+			if (select == JOptionPane.YES_OPTION)
+				System.exit(1);
+		}
 		else if(e.getActionCommand().equals("Stop")){
 			running = !running;
 			System.out.println("Stopping FPS");
@@ -165,6 +190,11 @@ public class Client extends JFrame implements ActionListener {
 			gameScreen.setDisplayGrid(displayGrid);
 			buildHome = !buildHome;
 		}
+		else if (e.getActionCommand().equals("Farm")){
+			displayGrid = !displayGrid;
+			gameScreen.setDisplayGrid(displayGrid);
+			buildFarm = !buildFarm;
+		}
 		
 	}
 	
@@ -172,11 +202,19 @@ public class Client extends JFrame implements ActionListener {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			if (buildHome && gold > 0){
+			if (buildHome && gold >= 100 && food >= 20){
 				gold -= 100;
+				food -= 20;
 				updateTopPanel();
 				point = new Point(e.getX(),e.getY());
-				gameScreen.setClicked(point);
+				gameScreen.setHomes(point);
+			}
+			else if (buildFarm && gold >= 50 && people >= 3){
+				gold -= 50;
+				people -= 3;
+				updateTopPanel();
+				point = new Point(e.getX(),e.getY());
+				gameScreen.setFarms(point);
 			}
 			
 		}
@@ -215,6 +253,10 @@ public class Client extends JFrame implements ActionListener {
 		@Override
 		public void mouseMoved(MouseEvent e) {
 			if (buildHome){
+				point = new Point(e.getX(),e.getY());
+				gameScreen.setPoint(point);
+			}
+			else if (buildFarm){
 				point = new Point(e.getX(),e.getY());
 				gameScreen.setPoint(point);
 			}
