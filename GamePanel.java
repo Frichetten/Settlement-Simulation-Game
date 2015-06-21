@@ -16,8 +16,13 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel {
 	
 	private Point point = new Point(0,0);
+	private Point point1 = new Point(0,0);
+	private Point point2 = new Point(0,0);
 	private ArrayList<Point> homes = new ArrayList<Point>();
 	private ArrayList<Point> farms = new ArrayList<Point>();
+	private ArrayList<Point> walls = new ArrayList<Point>();
+	private ArrayList<Point> barracks = new ArrayList<Point>();
+	private ArrayList<Soldier> soldiers = new ArrayList<Soldier>();
 	private boolean displayGrid;
 	private String isStructure = "";
 	
@@ -48,6 +53,20 @@ public class GamePanel extends JPanel {
 			g.setColor(Color.BLUE);
 			g.drawRect((int)point.getX(), (int)point.getY(), 60, 60);
 		}
+		else if (isStructure.equals("wall") && displayGrid){
+			g.setColor(Color.GRAY);
+			g.drawLine((int)point.getX(), (int)point.getY(), (int)point.getX()+50, (int)point.getY()+50);
+		}
+		else if (isStructure.equals("barracks") && displayGrid){
+			g.setColor(Color.WHITE);
+			g.drawRect((int)point.getX(), (int)point.getY(), 120, 60);
+		}
+		else {
+			g.setColor(Color.YELLOW);
+			int width = (int) (point2.getX()-point1.getX());
+			int height = (int) (point2.getY()-point1.getY());
+			g.fillRect((int)point1.getX(), (int)point.getY(), width, height);
+		}
 		
 		//Drawing Homes
 		g.setColor(Color.RED);
@@ -74,6 +93,27 @@ public class GamePanel extends JPanel {
 			g.drawRect((int)farms.get(i).getX()-3, (int)farms.get(i).getY()-3, 60, 60);
 			g.drawString("Farm", (int)farms.get(i).getX()+15, (int)farms.get(i).getY()+30);
 		}
+		
+		//Drawing Walls
+		//
+		
+		//Drawing Barracks
+		g.setColor(Color.WHITE);
+		for (int i = 0; i < barracks.size(); i++){
+			g.fillRect((int)barracks.get(i).getX(), (int)barracks.get(i).getY(), 120, 60);
+		}
+		g.setColor(Color.BLACK);
+		for (int i = 0; i < barracks.size(); i++){
+			g.drawRect((int)barracks.get(i).getX()-1, (int)barracks.get(i).getY()-1, 120, 60);
+			g.drawRect((int)barracks.get(i).getX()-2, (int)barracks.get(i).getY()-2, 120, 60);
+			g.drawRect((int)barracks.get(i).getX()-3, (int)barracks.get(i).getY()-3, 120, 60);
+			g.drawString("Barracks", (int)barracks.get(i).getX()+33, (int)barracks.get(i).getY()+30);
+		}
+		
+	}
+	
+	public void generateSoldier(){
+		
 	}
 	
 	public void setPoint(Point p){
@@ -88,6 +128,21 @@ public class GamePanel extends JPanel {
 	public void setFarms(Point p){
 		point = p;
 		farms.add(p);
+	}
+	
+	public void setWalls(Point p){
+		point = p;
+		walls.add(p);
+	}
+	
+	public void setBarracks(Point p){
+		point = p;
+		barracks.add(p);
+	}
+	
+	public void setBox(Point p1, Point p2){
+		point1 = p1;
+		point2 = p2;
 	}
 	
 	public void setDisplayGrid(boolean b){
