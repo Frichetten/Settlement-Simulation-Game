@@ -47,11 +47,15 @@ public class GamePanel extends JPanel {
 		//Drawing Current Selection tied to mouse
 		if (isStructure.equals("home") && displayGrid){
 			g.setColor(Color.RED);
-			g.drawRect((int)point.getX(), (int)point.getY(), 60, 30);
+			int x = (int)point.getX()/30;
+			int y = (int)point.getY()/30;
+			g.drawRect(x*30, y*30, 60, 30);
 		}
 		else if (isStructure.equals("farm") && displayGrid){
 			g.setColor(Color.BLUE);
-			g.drawRect((int)point.getX(), (int)point.getY(), 60, 60);
+			int x = (int)point.getX()/30;
+			int y = (int)point.getY()/30;
+			g.drawRect(x*30, y*30, 60, 60);
 		}
 		else if (isStructure.equals("wall") && displayGrid){
 			g.setColor(Color.GRAY);
@@ -59,6 +63,9 @@ public class GamePanel extends JPanel {
 		}
 		else if (isStructure.equals("barracks") && displayGrid){
 			g.setColor(Color.WHITE);
+			int x = (int)point.getX()/30;
+			int y = (int)point.getY()/30;
+			g.drawRect(x*30, y*30, 120, 60);
 			g.drawRect((int)point.getX(), (int)point.getY(), 120, 60);
 		}
 		else {
@@ -122,12 +129,18 @@ public class GamePanel extends JPanel {
 	
 	public void setHomes(Point p){
 		point = p;
-		homes.add(p);
+		int x = (int)p.getX()/30;
+		int y = (int)p.getY()/30;
+		Point pnt = new Point(x*30,y*30);
+		homes.add(pnt);
 	}
 	
 	public void setFarms(Point p){
 		point = p;
-		farms.add(p);
+		int x = (int)p.getX()/30;
+		int y = (int)p.getY()/30;
+		Point pnt = new Point(x*30,y*30);
+		farms.add(pnt);
 	}
 	
 	public void setWalls(Point p){
@@ -137,7 +150,10 @@ public class GamePanel extends JPanel {
 	
 	public void setBarracks(Point p){
 		point = p;
-		barracks.add(p);
+		int x = (int)p.getX()/30;
+		int y = (int)p.getY()/30;
+		Point pnt = new Point(x*30,y*30);
+		barracks.add(pnt);
 	}
 	
 	public void setBox(Point p1, Point p2){

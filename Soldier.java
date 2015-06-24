@@ -1,3 +1,5 @@
+import java.awt.Point;
+
 /**
  * 
  */
@@ -12,5 +14,40 @@
  *
  */
 public class Soldier {
+	private Point location;
+	private Point targetLocation = null;
+	private boolean flagged;
+	
+	public Soldier(Point p){
+		location = p;
+	}
+	
+	public int getX(){
+		return (int)location.getX();
+	}
+	
+	public void setPoint(Point p){
+		location = p;
+	}
+	
+	public int getY(){
+		return (int)location.getY();
+	}
+	
+	public void setFlag(){
+		flagged = !flagged;
+	}
+	
+	public boolean isFlagged(){
+		return flagged;
+	}
+	
+	public void setTargetLocation(Point p){
+		targetLocation = p;
+	}
+	
+	public Point getTargetLocation(){
+		return targetLocation;
+	}
 
 }

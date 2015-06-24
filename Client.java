@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.MouseInputListener;
 
@@ -357,6 +358,9 @@ public class Client extends JFrame implements ActionListener {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
+//			if (SwingUtilities.isRightMouseButton(e)){
+//				System.out.println("neien");
+//			}
 			point = new Point(e.getX(),e.getY());
 			gameScreen.setPoint(point);
 			
