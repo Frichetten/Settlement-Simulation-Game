@@ -21,7 +21,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.MouseInputListener;
 
-
 /**
  * @author Nicholas Frichette
  * This class is the "client" of the game meaning that it is the frame
@@ -35,15 +34,14 @@ public class Client extends JFrame implements ActionListener {
 	private boolean buildHome = false;
 	private boolean buildFarm = false;
 	private boolean buildWall = false;
-	private boolean buildBarracks = false;
+	private boolean buildMarket = false;
 	private boolean displayGrid = false;
-	private int gold = 5000;
-	private int food = 250;
-	private int people = 50;
-	private int totalPeople = 8;
+	private int gold = 500;
+	private int food = 50;
+	private int people = 5;
 	private JPanel topPanel = new JPanel();
 	private JTextArea goldCounter;
-	private JButton barracks;
+	private JButton market;
 	private Container client;
 	
 	/**
@@ -76,15 +74,15 @@ public class Client extends JFrame implements ActionListener {
 		orderPanel.setLayout(new GridLayout(2,2));
 		JButton home = new JButton("Home");
 		JButton farm = new JButton("Farm");
-		barracks = new JButton("Barracks");
+		market = new JButton("Market");
 		JButton wall = new JButton("Wall");
 		orderPanel.add(wall);
-		orderPanel.add(barracks);
+		orderPanel.add(market);
 		orderPanel.add(home);
 		orderPanel.add(farm);
 		farm.setOpaque(false);
 		home.setOpaque(false);
-		barracks.setOpaque(false);
+		market.setOpaque(false);
 		wall.setOpaque(false);
 		
 		//Creating the unitPanel which will hold the orderPanel as well
@@ -109,7 +107,7 @@ public class Client extends JFrame implements ActionListener {
 		home.addActionListener(this);
 		farm.addActionListener(this);
 		wall.addActionListener(this);
-		barracks.addActionListener(this);
+		market.addActionListener(this);
 		
 		//Adding the gameScreen, topPanel, and unitPanel all to the client window
 		client.add(topPanel, BorderLayout.NORTH);
@@ -119,7 +117,7 @@ public class Client extends JFrame implements ActionListener {
 		//Button on Hover for Home
 		home.addMouseListener(new MouseAdapter(){
 			public void mouseEntered(MouseEvent e){
-				playerInfo.setText("Costs: 100 Gold, 20 Food  Creates: 5 people");
+				playerInfo.setText("Costs: 50 Gold, 15 Food  Creates: 15 people");
 			}
 			public void mouseExited(MouseEvent e){
 				playerInfo.setText("");
@@ -129,7 +127,7 @@ public class Client extends JFrame implements ActionListener {
 		//Button on Hover for Farm
 		farm.addMouseListener(new MouseAdapter(){
 			public void mouseEntered(MouseEvent e){
-				playerInfo.setText("Costs: 50 Gold, 3 People  Creates: 20 Food");
+				playerInfo.setText("Costs: 50 Gold, 5 People  Creates: 25 Food");
 			}
 			public void mouseExited(MouseEvent e){
 				playerInfo.setText("");
@@ -147,10 +145,10 @@ public class Client extends JFrame implements ActionListener {
 			}
 		});
 		
-		//Button on Hover for barracks
-		barracks.addMouseListener(new MouseAdapter(){
+		//Button on Hover for market
+		market.addMouseListener(new MouseAdapter(){
 			public void mouseEntered(MouseEvent e){
-				playerInfo.setText("Costs: 5 People  Creates: "
+				playerInfo.setText("Costs: 25 People  Creates: "
 						+ "750 Gold");
 			}
 			public void mouseExited(MouseEvent e){
@@ -196,19 +194,15 @@ public class Client extends JFrame implements ActionListener {
 		//This is where the loop will be. This includes both the repainting
 		//of the game panel and the updates to the panel and the internal
 		//information.
-		int FPSCounter = 0;
 		long originalMS = System.currentTimeMillis();
 		long MSCounter = System.currentTimeMillis();
 				
 		while(running){
 			if (System.currentTimeMillis() >= MSCounter + 15){
 				gameScreen.paintImmediately(client.getBounds());;
-				FPSCounter++;
 				MSCounter = System.currentTimeMillis();
 			}
 			if (originalMS + 1000 <= MSCounter){
-				System.out.println(FPSCounter);
-				FPSCounter = 0;
 				MSCounter = System.currentTimeMillis();
 				originalMS = System.currentTimeMillis();
 			}
@@ -218,25 +212,14 @@ public class Client extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getActionCommand().equals("Start")){
-			System.out.println("Starting FPS");
-			running = !running;
-			if (running){
-				runGameLoop();
-			}
-		}
-		else if (e.getActionCommand().equals("Options")){
+		if (e.getActionCommand().equals("Options")){
 			System.out.println("Accessing Options");
 			int select = JOptionPane.showConfirmDialog(null,"Exit?", "",JOptionPane.YES_NO_OPTION);
 			if (select == JOptionPane.YES_OPTION)
 				System.exit(1);
 		}
-		else if(e.getActionCommand().equals("Stop")){
-			running = !running;
-			System.out.println("Stopping FPS");
-		}
 		else if (e.getActionCommand().equals("Home")){
-			if (displayGrid && buildFarm || buildWall || buildBarracks)
+			if (displayGrid && buildFarm || buildWall || buildMarket)
 				;
 			else{
 				displayGrid = !displayGrid;
@@ -247,7 +230,7 @@ public class Client extends JFrame implements ActionListener {
 			gameScreen.setIsStructure("home");
 		}
 		else if (e.getActionCommand().equals("Farm")){
-			if (displayGrid && buildHome || buildWall || buildBarracks)
+			if (displayGrid && buildHome || buildWall || buildMarket)
 				;
 			else {
 				displayGrid = !displayGrid;
@@ -258,7 +241,7 @@ public class Client extends JFrame implements ActionListener {
 			gameScreen.setIsStructure("farm");
 		}
 		else if (e.getActionCommand().equals("Wall")){
-			if (displayGrid && buildFarm || buildHome || buildBarracks)
+			if (displayGrid && buildFarm || buildHome || buildMarket)
 				;
 			else {
 				displayGrid = !displayGrid;
@@ -268,7 +251,7 @@ public class Client extends JFrame implements ActionListener {
 			buildWall = !buildWall;
 			gameScreen.setIsStructure("wall");
 		}
-		else if (e.getActionCommand().equals("Barracks")){
+		else if (e.getActionCommand().equals("Market")){
 			if (displayGrid && buildFarm || buildHome || buildWall)
 				;
 			else {
@@ -276,10 +259,9 @@ public class Client extends JFrame implements ActionListener {
 				gameScreen.setDisplayGrid(displayGrid);
 			}
 			negateStructures();
-			buildBarracks = !buildBarracks;
-			gameScreen.setIsStructure("barracks");
+			buildMarket = !buildMarket;
+			gameScreen.setIsStructure("market");
 		}
-		
 	}
 	
 	/**
@@ -289,25 +271,25 @@ public class Client extends JFrame implements ActionListener {
 		buildFarm = false;
 		buildHome = false;
 		buildWall = false;
-		buildBarracks = false;
+		buildMarket = false;
 	}
 	
 	public class MouseMotionDetector implements MouseInputListener {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			if (displayGrid && buildHome && gold >= 100 && food >= 20){
-				gold -= 100;
-				food -= 20;
-				people += 5;
+			if (displayGrid && buildHome && gold >= 50 && food >= 15){
+				gold -= 50;
+				food -= 15;
+				people += 15;
 				updateTopPanel();
 				point = new Point(e.getX(),e.getY());
 				gameScreen.setHomes(point);
 			}
-			else if (displayGrid && buildFarm && gold >= 50 && people >= 3){
+			else if (displayGrid && buildFarm && gold >= 50 && people >= 5){
 				gold -= 50;
-				people -= 3;
-				food += 20;
+				people -= 5;
+				food += 25;
 				updateTopPanel();
 				point = new Point(e.getX(),e.getY());
 				gameScreen.setFarms(point);
@@ -318,56 +300,15 @@ public class Client extends JFrame implements ActionListener {
 				point = new Point(e.getX(),e.getY());
 				gameScreen.setWalls(point);
 			}
-			else if (displayGrid && buildBarracks && people >= 5){
-				people -= 5;
+			else if (displayGrid && buildMarket && people >= 25){
+				people -= 25;
 				gold += 750;
 				updateTopPanel();
 				point = new Point(e.getX(),e.getY());
-				gameScreen.setBarracks(point);
+				gameScreen.setMarket(point);
 			}
-			
 		}
 		
-		Point point1 = point;
-		Point point2;
-		
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			point = new Point(e.getX(),e.getY());
-			gameScreen.setPoint(point);
-			
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			point1 = new Point(0,0);
-			point2 = new Point(0,0);
-			gameScreen.setBox(point1, point2);
-		}
-		
-		/**
-		 * All sorts of fun stuff will be in here. this will be the 
-		 * primary method that allows the player to move troops around 
-		 * the map.
-		 */
-		@Override
-		public void mouseDragged(MouseEvent e) {
-			point1 = point;
-			point2 = new Point(e.getX(),e.getY());
-			gameScreen.setBox(point1,point2);
-		}
-
 		@Override
 		public void mouseMoved(MouseEvent e) {
 			if (buildHome){
@@ -382,13 +323,27 @@ public class Client extends JFrame implements ActionListener {
 				point = new Point(e.getX(),e.getY());
 				gameScreen.setPoint(point);
 			}
-			else if (buildBarracks){
+			else if (buildMarket){
 				point = new Point(e.getX(),e.getY());
 				gameScreen.setPoint(point);
 			}
-			
 		}
 		
+		@Override
+		public void mouseEntered(MouseEvent e) {
+		}
+		@Override
+		public void mouseExited(MouseEvent e) {
+		}
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
+		@Override
+		public void mouseReleased(MouseEvent e) {
+		}
+		@Override
+		public void mouseDragged(MouseEvent e) {
+		}
 	}
 	
 	

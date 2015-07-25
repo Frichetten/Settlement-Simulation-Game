@@ -6,22 +6,16 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 /**
- * 
- */
-
-/**
  * @author Nicholas Frichette
  *
  */
 public class GamePanel extends JPanel {
 	
 	private Point point = new Point(0,0);
-	private Point point1 = new Point(0,0);
-	private Point point2 = new Point(0,0);
 	private ArrayList<Point> homes = new ArrayList<Point>();
 	private ArrayList<Point> farms = new ArrayList<Point>();
 	private ArrayList<Point> walls = new ArrayList<Point>();
-	private ArrayList<Point> barracks = new ArrayList<Point>();
+	private ArrayList<Point> markets = new ArrayList<Point>();
 	private boolean displayGrid;
 	private String isStructure = "";
 	
@@ -62,18 +56,12 @@ public class GamePanel extends JPanel {
 			int y = (int)point.getY()/30;
 			g.drawRect(x*30, y*30, 30, 30);
 		}
-		else if (isStructure.equals("barracks") && displayGrid){
+		else if (isStructure.equals("market") && displayGrid){
 			g.setColor(Color.WHITE);
 			int x = (int)point.getX()/30;
 			int y = (int)point.getY()/30;
 			g.drawRect(x*30, y*30, 120, 60);
 			g.drawRect((int)point.getX(), (int)point.getY(), 120, 60);
-		}
-		else {
-			g.setColor(Color.YELLOW);
-			int width = (int) (point2.getX()-point1.getX());
-			int height = (int) (point2.getY()-point1.getY());
-			g.fillRect((int)point1.getX(), (int)point.getY(), width, height);
 		}
 		
 		//Drawing Homes
@@ -108,17 +96,17 @@ public class GamePanel extends JPanel {
 			g.fillRect((int)walls.get(i).getX(), (int)walls.get(i).getY(), 30, 30);
 		}
 		
-		//Drawing Barracks
+		//Drawing Market
 		g.setColor(Color.WHITE);
-		for (int i = 0; i < barracks.size(); i++){
-			g.fillRect((int)barracks.get(i).getX(), (int)barracks.get(i).getY(), 120, 60);
+		for (int i = 0; i < markets.size(); i++){
+			g.fillRect((int)markets.get(i).getX(), (int)markets.get(i).getY(), 120, 60);
 		}
 		g.setColor(Color.BLACK);
-		for (int i = 0; i < barracks.size(); i++){
-			g.drawRect((int)barracks.get(i).getX()-1, (int)barracks.get(i).getY()-1, 120, 60);
-			g.drawRect((int)barracks.get(i).getX()-2, (int)barracks.get(i).getY()-2, 120, 60);
-			g.drawRect((int)barracks.get(i).getX()-3, (int)barracks.get(i).getY()-3, 120, 60);
-			g.drawString("Barracks", (int)barracks.get(i).getX()+33, (int)barracks.get(i).getY()+30);
+		for (int i = 0; i < markets.size(); i++){
+			g.drawRect((int)markets.get(i).getX()-1, (int)markets.get(i).getY()-1, 120, 60);
+			g.drawRect((int)markets.get(i).getX()-2, (int)markets.get(i).getY()-2, 120, 60);
+			g.drawRect((int)markets.get(i).getX()-3, (int)markets.get(i).getY()-3, 120, 60);
+			g.drawString("Market", (int)markets.get(i).getX()+40, (int)markets.get(i).getY()+30);
 		}
 		
 	}
@@ -151,17 +139,12 @@ public class GamePanel extends JPanel {
 		walls.add(pnt);
 	}
 	
-	public void setBarracks(Point p){
+	public void setMarket(Point p){
 		point = p;
 		int x = (int)p.getX()/30;
 		int y = (int)p.getY()/30;
 		Point pnt = new Point(x*30,y*30);
-		barracks.add(pnt);
-	}
-	
-	public void setBox(Point p1, Point p2){
-		point1 = p1;
-		point2 = p2;
+		markets.add(pnt);
 	}
 	
 	public void setDisplayGrid(boolean b){

@@ -1,7 +1,5 @@
 import javax.swing.JFrame;
 
-
-
 /**
  * @author Nicholas Frichette
  */
@@ -22,10 +20,5 @@ public class Driver {
 		Client game = new Client();
 		game.runGameLoop();
 		game.setVisible(true);
-		
-		
-		
-
 	}
-
 }
