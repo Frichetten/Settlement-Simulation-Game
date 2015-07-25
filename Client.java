@@ -41,10 +41,8 @@ public class Client extends JFrame implements ActionListener {
 	private int food = 250;
 	private int people = 50;
 	private int totalPeople = 8;
-	private int soldiers = 0;
 	private JPanel topPanel = new JPanel();
 	private JTextArea goldCounter;
-	private JButton Options;
 	private JButton barracks;
 	private Container client;
 	
@@ -63,7 +61,7 @@ public class Client extends JFrame implements ActionListener {
 		//Creating the top panel that houses information such as money/food
 		topPanel.setLayout(new BorderLayout());
 		goldCounter = new JTextArea("  Gold: " + gold + "  Food: " + food +
-				"  People: " + people + "/" + totalPeople + "  Soldiers: " + soldiers + "  ");
+				"  Unemployed People: " + people + " ");
 		JButton options = new JButton("Options");
 		topPanel.add(options, BorderLayout.WEST);
 		topPanel.add(goldCounter, BorderLayout.EAST);
@@ -141,7 +139,7 @@ public class Client extends JFrame implements ActionListener {
 		//Button on Hover for wall
 		wall.addMouseListener(new MouseAdapter(){
 			public void mouseEntered(MouseEvent e){
-				playerInfo.setText("Costs: 400 Gold  Creates: A "
+				playerInfo.setText("Costs: 10 Gold  Creates: A "
 						+ "defensive perimeter");
 			}
 			public void mouseExited(MouseEvent e){
@@ -152,8 +150,8 @@ public class Client extends JFrame implements ActionListener {
 		//Button on Hover for barracks
 		barracks.addMouseListener(new MouseAdapter(){
 			public void mouseEntered(MouseEvent e){
-				playerInfo.setText("Costs: 1000 Gold, 5 People  Creates: A "
-						+ "building to create Troops");
+				playerInfo.setText("Costs: 5 People  Creates: "
+						+ "750 Gold");
 			}
 			public void mouseExited(MouseEvent e){
 				playerInfo.setText("");
@@ -179,7 +177,7 @@ public class Client extends JFrame implements ActionListener {
 	 */
 	public void updateTopPanel(){
 		goldCounter = new JTextArea("  Gold: " + gold + "  Food: " + food +
-				"  People: " + people + "/" + totalPeople + "  Soldiers: " + soldiers + "  ");
+				"  Unemployed People: " + people + " ");
 		topPanel.removeAll();
 		gameScreen.remove(topPanel);
 		topPanel.setLayout(new BorderLayout());
@@ -281,11 +279,6 @@ public class Client extends JFrame implements ActionListener {
 			buildBarracks = !buildBarracks;
 			gameScreen.setIsStructure("barracks");
 		}
-		else if (e.getActionCommand().equals("Build Soldier- 100G")){
-			gold -= 100;
-			soldiers++;
-			updateTopPanel();
-		}
 		
 	}
 	
@@ -319,25 +312,18 @@ public class Client extends JFrame implements ActionListener {
 				point = new Point(e.getX(),e.getY());
 				gameScreen.setFarms(point);
 			}
-			else if (displayGrid && buildWall && gold >= 400){
-				gold -= 400;
+			else if (displayGrid && buildWall && gold >= 10){
+				gold -= 10;
 				updateTopPanel();
 				point = new Point(e.getX(),e.getY());
 				gameScreen.setWalls(point);
 			}
-			else if (displayGrid && buildBarracks && gold >= 1000 && people >= 5){
-				gold -= 1000;
+			else if (displayGrid && buildBarracks && people >= 5){
 				people -= 5;
+				gold += 750;
 				updateTopPanel();
 				point = new Point(e.getX(),e.getY());
 				gameScreen.setBarracks(point);
-				displayGrid = !displayGrid;
-				buildBarracks = !buildBarracks;
-				gameScreen.setDisplayGrid(displayGrid);
-				gameScreen.setIsStructure("");
-				barracks.setText("Build Soldier- 100G");
-				client.revalidate();
-				client.repaint();
 			}
 			
 		}
@@ -358,9 +344,6 @@ public class Client extends JFrame implements ActionListener {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-//			if (SwingUtilities.isRightMouseButton(e)){
-//				System.out.println("neien");
-//			}
 			point = new Point(e.getX(),e.getY());
 			gameScreen.setPoint(point);
 			
