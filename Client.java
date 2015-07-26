@@ -42,6 +42,7 @@ public class Client extends JFrame implements ActionListener {
 	private JPanel topPanel = new JPanel();
 	private JTextArea goldCounter;
 	private JButton market;
+	private JButton playerInfo;
 	private Container client;
 	
 	/**
@@ -89,7 +90,7 @@ public class Client extends JFrame implements ActionListener {
 		//as the box that displays info to the player.
 		JPanel unitPanel = new JPanel();
 		unitPanel.setLayout(new GridLayout(1,3));
-		JButton playerInfo = new JButton("");
+		playerInfo = new JButton("");
 		playerInfo.setRolloverEnabled(false);
 		unitPanel.add(playerInfo);
 		unitPanel.add(orderPanel);
@@ -274,7 +275,7 @@ public class Client extends JFrame implements ActionListener {
 		buildMarket = false;
 	}
 	
-	public class MouseMotionDetector implements MouseInputListener {
+	private class MouseMotionDetector implements MouseInputListener {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
