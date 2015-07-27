@@ -51,7 +51,7 @@ public class Client extends JFrame implements ActionListener {
 	public Client(){
 		
 		//Building the basics of the "Client" The frame the player interacts in
-		super("Client");
+		super("Settlement Simulator");
 		client = getContentPane();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		client.setLayout(new BorderLayout());
