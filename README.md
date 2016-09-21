@@ -11,3 +11,5 @@ avatars to represent the number of people in the settlement.
 
 -Nicholas Frichette
 7/25/2015
+
+**(Project complete - no further improvements will be made)**
